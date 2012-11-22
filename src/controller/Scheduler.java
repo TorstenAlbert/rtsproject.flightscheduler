@@ -1,9 +1,12 @@
 package controller;
 
-import model.Plane;
-import java.util.LinkedList;
+/**
+ * Scheduler is calling scheduling algorithm and should preform a landing sequence
+ * @author Torsten
+ *
+ */
 
-public interface Scheduler {
-	public Plane getNextPlane(LinkedList<Plane> taskList);
+public class Scheduler {
+	
 	
 }
