@@ -1,4 +1,7 @@
-package model;
+
+
+import java.sql.Timestamp;
+
 /**
  * The plane is  in respect to the Scheduling one Task
  * @author Torsten
@@ -10,7 +13,7 @@ public class Plane {
 	private static int	planeCounter	= 0;
 	
 	private boolean emergencyFlag;
-	private int landingDeadline;
+	private Timestamp landingDeadline;
 	private int landingDuration;
 	private String planeName;
 	
@@ -21,11 +24,11 @@ public class Plane {
 	public void setEmergencyFlag(boolean emergencyFlag) {
 		this.emergencyFlag = emergencyFlag;
 	}
-	public int getLandingDeadline() {
+	public Timestamp getLandingDeadline() {
 		return landingDeadline;
 	}
-	public void setLandingDeadline(int landingDeadline) {
-		this.landingDeadline = landingDeadline;
+	public void setLandingDeadline(long landingDeadline) {
+		this.landingDeadline.setTime(landingDeadline);
 	}
 	public int getLandingDuration() {
 		return landingDuration;
@@ -43,10 +46,10 @@ public class Plane {
 		return planeCounter;
 	}
 	
-	public Plane(String name, boolean emergency, int duration, int deadline){
+	public Plane(String name, boolean emergency, int duration, long deadline){
 		planeCounter++;
 		this.emergencyFlag = emergency;
-		this.landingDeadline = deadline;
+		this.landingDeadline = new Timestamp(deadline);
 		this.landingDuration = duration;
 		this.planeName = name;
 		

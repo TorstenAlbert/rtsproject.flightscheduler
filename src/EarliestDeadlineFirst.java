@@ -1,8 +1,6 @@
-package controller;
+
 
 import java.util.LinkedList;
-
-import model.Plane;
 
 public class EarliestDeadlineFirst implements Algorithm {
 
@@ -12,7 +10,7 @@ public class EarliestDeadlineFirst implements Algorithm {
 			Plane nextPlane = planeList.get(0);
 			for (int i = 0; i < planeList.size(); i++){
 				Plane canidatePlane = planeList.get(i);
-					if( nextPlane.getLandingDeadline()  > canidatePlane.getLandingDeadline() ){
+					if( nextPlane.getLandingDeadline().before(canidatePlane.getLandingDeadline())){
 						nextPlane = canidatePlane;
 						}
 					}

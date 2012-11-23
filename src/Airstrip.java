@@ -1,4 +1,4 @@
-package model;
+
 
 import java.util.LinkedList;
 
@@ -6,6 +6,10 @@ public class Airstrip {
 	private static int	airstripCounter	= 0;
 	//private int length; in upcoming version
 	
+	public static int getAirstripCounter() {
+		return airstripCounter;
+	}
+
 	private LinkedList<Plane> landedPlanes;
 	private boolean isBusy;
 	

@@ -1,8 +1,6 @@
-package controller;
+
 
 import java.util.LinkedList;
-
-import model.Plane;
 
 public class RateMonotonicScheduling implements Algorithm {
 
