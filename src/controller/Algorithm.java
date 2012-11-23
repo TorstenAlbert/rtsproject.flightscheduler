@@ -9,5 +9,5 @@ import java.util.LinkedList;
  */
 
 public interface Algorithm {
-	public Plane getNextTask(LinkedList<Plane> taskList);
+	public Plane getNextTask(LinkedList<Plane> planeList);
 }

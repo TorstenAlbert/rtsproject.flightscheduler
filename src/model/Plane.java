@@ -45,7 +45,6 @@ public class Plane {
 	
 	public Plane(String name, boolean emergency, int duration, int deadline){
 		planeCounter++;
-		
 		this.emergencyFlag = emergency;
 		this.landingDeadline = deadline;
 		this.landingDuration = duration;
