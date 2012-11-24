@@ -2,23 +2,24 @@
 
 import java.util.LinkedList;
 
-public class RateMonotonicScheduling implements Algorithm {
+public class EarliestDeadlineFirstDelegate implements AlgorithmAdapter {
 
-	public Plane getNextTask(LinkedList<Plane> planeList) {
+	public Plane getNextPlane(LinkedList<Plane> planeList) {
 		// TODO Auto-generated method stub
 		if(planeList.size()>0){
 			Plane nextPlane = planeList.get(0);
 			for (int i = 0; i < planeList.size(); i++){
 				Plane canidatePlane = planeList.get(i);
-				if((nextPlane.isEmergencyFlag() == false)&&(canidatePlane.isEmergencyFlag() == true)){
-					nextPlane = canidatePlane;
-				}
-			}
+					if( nextPlane.getLandingDeadline().before(canidatePlane.getLandingDeadline())){
+						nextPlane = canidatePlane;
+						}
+					}
 			return nextPlane;
-			
 		}else{
 			return null;
-		}
+			}
 	}
 
 }
+
+

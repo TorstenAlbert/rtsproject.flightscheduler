@@ -9,8 +9,9 @@ public class Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Scheduler app = new Scheduler();
+		FlightScheduler app = new FlightScheduler();
 		app.createPlane();
+		app.landPlane();
 
 	}
 

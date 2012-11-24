@@ -7,6 +7,6 @@ import java.util.LinkedList;
  *
  */
 
-public interface Algorithm {
-	public Plane getNextTask(LinkedList<Plane> planeList);
+public interface AlgorithmAdapter {
+	public Plane getNextPlane(LinkedList<Plane> planeList);
 }

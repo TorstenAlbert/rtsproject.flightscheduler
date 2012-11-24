@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 public class Plane {
 
 	private static int	planeCounter	= 0;
-	
 	private boolean emergencyFlag;
 	private Timestamp landingDeadline;
 	private int landingDuration;
@@ -51,7 +50,7 @@ public class Plane {
 		this.emergencyFlag = emergency;
 		this.landingDeadline = new Timestamp(deadline);
 		this.landingDuration = duration;
-		this.planeName = name;
-		
+		this.planeName = name;		
 	}
+
 }

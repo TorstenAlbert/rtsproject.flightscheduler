@@ -1,12 +1,14 @@
 
 
+import java.sql.Timestamp;
 import java.util.LinkedList;
+import java.util.Timer;
 
 public class Airstrip {
-	private static int	airstripCounter	= 0;
+	private int	airstripCounter	= 0;
 	//private int length; in upcoming version
 	
-	public static int getAirstripCounter() {
+	public  int getAirstripCounter() {
 		return airstripCounter;
 	}
 
@@ -20,6 +22,18 @@ public class Airstrip {
 		this.isBusy = isBusy;
 	}
 	
+	public void occupyAirstrip(int duration)
+	{long waitingTime= 60000*duration;
+		System.out.println("---BeginWaitAirstrip#:" +this.getAirstripCounter() +"---");
+
+
+		//	timer.wait(waitingTime);
+		System.out.println( "!!!Throws InterruptedException");
+		this.isBusy = false;
+		System.out.println( "Current Time: " + new Timestamp(System.currentTimeMillis()).toString());
+		System.out.println("---EndWaitAirstrip#:" +this.getAirstripCounter() +"---");
+	}
+	
 	public void addLandedPlane(Plane landedPlane) {
 		landedPlanes.add(landedPlane);
 	}
@@ -28,7 +42,9 @@ public class Airstrip {
 	}
 	
 	public Airstrip() {
-		airstripCounter++;}
+		airstripCounter++;
+		landedPlanes= new LinkedList<Plane>();
+		isBusy=false;}
 	
 /*	public Airstrip(int rlength) {
 		planeCounter++;
