@@ -1,6 +1,8 @@
 
 
 import java.sql.Timestamp;
+import java.util.Comparator;
+
 
 /**
  * The plane is  in respect to the Scheduling one Task
@@ -13,6 +15,7 @@ public class Plane {
 	private static int	planeCounter	= 0;
 	private boolean emergencyFlag;
 	private Timestamp landingDeadline;
+	private Timestamp landingScheduledTime;
 	private int landingDuration;
 	private String planeName;
 	
@@ -38,6 +41,13 @@ public class Plane {
 	public String getPlaneName() {
 		return planeName;
 	}
+	public Timestamp getScheduledTime(){
+		return landingScheduledTime;		
+	}
+	public void setScheduledTime(Timestamp newScheduledTime){
+		this.landingScheduledTime = newScheduledTime;		
+	}
+	
 	public void setPlaneName(String planeName) {
 		this.planeName = planeName;
 	}
@@ -45,12 +55,32 @@ public class Plane {
 		return planeCounter;
 	}
 	
+
+	
 	public Plane(String name, boolean emergency, int duration, long deadline){
 		planeCounter++;
 		this.emergencyFlag = emergency;
 		this.landingDeadline = new Timestamp(deadline);
+		this.landingScheduledTime = new Timestamp(deadline);
 		this.landingDuration = duration;
 		this.planeName = name;		
 	}
+	
+	public static Comparator<Plane> PlaneByTimeComparator = new Comparator<Plane>() 
+    {
+		public int compare(Plane plane0, Plane plane1) 
+		{	
+			int EmergencyWeight = 1;			
+								
+			if( plane0.isEmergencyFlag() && ! plane1.isEmergencyFlag() )
+			 return plane0.landingScheduledTime.compareTo(new Timestamp(plane1.landingScheduledTime.getTime() + EmergencyWeight*plane1.landingDuration*60*1000 ));
+			
+			if( ! plane0.isEmergencyFlag() && plane1.isEmergencyFlag() )
+			 return new Timestamp(plane0.landingScheduledTime.getTime() + EmergencyWeight*plane0.landingDuration*60*1000 ).compareTo(plane1.landingScheduledTime);
+			
+			return plane0.landingScheduledTime.compareTo(plane1.landingScheduledTime);
+		}
+	};
+
 
 }
