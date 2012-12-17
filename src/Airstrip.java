@@ -60,6 +60,11 @@ public class Airstrip {
 		RunWayPlanes.add(Plane);
 	}
 	
+	public void removeAllPlane()
+	{
+		RunWayPlanes.clear();
+	}
+	
 	public void removeLastPlane() {
 		
 		RunWayPlanes.remove(RunWayPlanes.size() - 1);

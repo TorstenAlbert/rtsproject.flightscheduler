@@ -99,13 +99,20 @@ public class AircraftScheduler {
 		
 		System.out.println("Landing Planes...");
 		
+		//Clear runways before scheduling
+		for( k=0; k < resourceAirstrips.length; k++)
+		{
+			resourceAirstrips[k].removeAllPlane();
+		}
+		
 		for( i=0; i < flights.size(); i++ )
 		{		
 			//If no available runways - then shift last plane, verify on which line gap is minimal
 			allLastPlanesAreEmergent = true;
 			RunWayWithMinGap=0;
 			Gap = resourceAirstrips[0].getGapBetweenNewAndLast(flights.get(i));
-			newGap = Gap; 
+			newGap = Gap;			
+			
 			for( k=0; k < resourceAirstrips.length; k++)
 			{
 				if( Gap > (newGap = resourceAirstrips[k].getGapBetweenNewAndLast(flights.get(i))) )
