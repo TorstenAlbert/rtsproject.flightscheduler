@@ -20,7 +20,7 @@ public class AircraftScheduler {
 		flights = new LinkedList<Plane>();
 		
 		for (int i = 0; i < resourceAirstrips.length; i++) {
-			 resourceAirstrips[i] =new Airstrip();
+			 resourceAirstrips[i] = new Airstrip();
 		}
 		
 
@@ -44,7 +44,7 @@ public class AircraftScheduler {
 		String textFromFile = getTextFromFile("PredefinedPlanes.txt");
 		String[] PlanesData = textFromFile.split("#");
 		String[] PlaneData = null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		
 		Plane[] PlanesToAdd = new Plane[PlanesData.length-1];
@@ -70,6 +70,22 @@ public class AircraftScheduler {
 		Collections.sort(flights, Plane.PlaneByTimeComparator);
 	}
 
+	public void addPlane( String PlaneName, boolean EmergencyFlag, int LandingDuration, String DateTime) throws ParseException
+	{
+	
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	    Plane PlaneToAdd = new Plane(  PlaneName,
+					                 EmergencyFlag,
+					                 LandingDuration,
+					                 dateFormat.parse(DateTime).getTime() 
+					                );
+						
+        flights.add(PlaneToAdd); 
+		
+		Collections.sort(flights, Plane.PlaneByTimeComparator);
+		
+	}
 
 	public void landPlanes(){
 		

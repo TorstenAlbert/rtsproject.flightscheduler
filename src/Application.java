@@ -28,6 +28,7 @@ public class Application {
         
         System.out.println("Nano seconds: " + diffN);
 		
+        new MainWidget();
 	}
 
 }
