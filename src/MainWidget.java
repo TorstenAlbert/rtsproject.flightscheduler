@@ -266,7 +266,7 @@ public class MainWidget extends JFrame {
 				if(AddingEmergencyTrue.isSelected())
 				{
 					try {
-						airScheduler.addPlane(AddingNameField.getText(), true, Integer.parseInt(AddingGapSpinner.getValue().toString()), AddingTimeSpinner.getValue().toString());
+						//airScheduler.addPlane(AddingNameField.getText(), true, Integer.parseInt(AddingGapSpinner.getValue().toString()), AddingTimeSpinner.getValue().toString());
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
