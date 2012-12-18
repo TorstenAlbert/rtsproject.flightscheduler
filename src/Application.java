@@ -18,8 +18,10 @@ public class Application {
         long startN = System.nanoTime();
 		
 		AircraftScheduler app = new AircraftScheduler();
+		MainWidget appWidget = new MainWidget(app);
 		app.createPlanes();
 		app.landPlanes();
+		appWidget.refreshTables();
 
 		long endN = System.nanoTime();
 		
@@ -28,7 +30,6 @@ public class Application {
         
         System.out.println("Nano seconds: " + diffN);
 		
-        new MainWidget();
 	}
 
 }
