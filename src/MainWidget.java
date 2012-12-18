@@ -8,7 +8,6 @@ import java.util.LinkedList;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**

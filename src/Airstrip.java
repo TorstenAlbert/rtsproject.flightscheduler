@@ -1,8 +1,6 @@
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Collections;
-import java.util.List;
 
 public class Airstrip {
 	private int	airstripCounter	= 0;

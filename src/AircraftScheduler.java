@@ -73,12 +73,16 @@ public class AircraftScheduler {
 	public void addPlane( String PlaneName, boolean EmergencyFlag, int LandingDuration, String DateTime) throws ParseException
 	{
 	
-        SimpleDateFormat dateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
-	
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
+	    
+        System.out.println("!" + DateTime + "!");
+        
+        String TestDate = "Mon Jul 18 14:11:11 MSK 2012";
+        
 	    Plane PlaneToAdd = new Plane(  PlaneName,
 					                 EmergencyFlag,
 					                 LandingDuration,
-					                 dateFormat.parse(DateTime).getTime() 
+					                 dateFormat.parse(TestDate).getTime() 
 					                );
 						
         flights.add(PlaneToAdd); 
@@ -171,7 +175,7 @@ public class AircraftScheduler {
 				
 			for( i=0; i < Rez.size(); i++)
 			{
-				System.out.println( k + " " + Rez.get(i).getScheduledTime().toString() + " " + Rez.get(i).getPlaneName());
+				//System.out.println( k + " " + Rez.get(i).getScheduledTime().toString() + " " + Rez.get(i).getPlaneName());
 			}	
 		}			
 		
