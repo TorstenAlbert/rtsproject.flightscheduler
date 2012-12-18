@@ -73,7 +73,7 @@ public class AircraftScheduler {
 	public void addPlane( String PlaneName, boolean EmergencyFlag, int LandingDuration, String DateTime) throws ParseException
 	{
 	
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
 	
 	    Plane PlaneToAdd = new Plane(  PlaneName,
 					                 EmergencyFlag,

@@ -13,7 +13,7 @@ public class Airstrip {
 	}
 
 	private LinkedList<Plane> landedPlanes;
-	private List<Plane> RunWayPlanes = new ArrayList<Plane>();
+	private LinkedList<Plane> RunWayPlanes = new LinkedList<Plane>();
 	
 	public boolean isBusy(Plane newPlane) {
 		
@@ -84,7 +84,7 @@ public class Airstrip {
 		return RunWayPlanes.get(RunWayPlanes.size() - 1);		
 	}
 	
-	public List<Plane> getPlanes() {
+	public LinkedList<Plane> getPlanes() {
 		return RunWayPlanes;
 	}
 	
