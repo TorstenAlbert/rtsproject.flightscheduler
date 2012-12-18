@@ -70,19 +70,13 @@ public class AircraftScheduler {
 		Collections.sort(flights, Plane.PlaneByTimeComparator);
 	}
 
-	public void addPlane( String PlaneName, boolean EmergencyFlag, int LandingDuration, String DateTime) throws ParseException
+	public void addPlane( String PlaneName, boolean EmergencyFlag, int LandingDuration, long DateTime) throws ParseException
 	{
-	
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
-	    
-        System.out.println("!" + DateTime + "!");
-        
-        String TestDate = "Mon Jul 18 14:11:11 MSK 2012";
-        
+	               
 	    Plane PlaneToAdd = new Plane(  PlaneName,
 					                 EmergencyFlag,
 					                 LandingDuration,
-					                 dateFormat.parse(TestDate).getTime() 
+					                 DateTime
 					                );
 						
         flights.add(PlaneToAdd); 
