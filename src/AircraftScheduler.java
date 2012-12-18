@@ -169,7 +169,7 @@ public class AircraftScheduler {
 				
 			for( i=0; i < Rez.size(); i++)
 			{
-				//System.out.println( k + " " + Rez.get(i).getScheduledTime().toString() + " " + Rez.get(i).getPlaneName());
+				System.out.println( k + " " + Rez.get(i).getScheduledTime().toString() + " " + Rez.get(i).getPlaneName());
 			}	
 		}			
 		

@@ -4,10 +4,12 @@ import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**
@@ -45,9 +47,11 @@ public class MainWidget extends JFrame {
 
 	JMenuItem helpItem;
 	
+	MainWidget originGUI;
+	
 	MainWidget(AircraftScheduler rScheduler)
 	{
-		
+		this.originGUI = this;
 		this.airScheduler = rScheduler;
 		AddingFrame = new AddingPlaneWidget();
 		AddingFrame.setVisible(false);
@@ -187,6 +191,11 @@ public class MainWidget extends JFrame {
 	LandingAirstrip3Label.setText(str);
 	}
 	
+	public void setTitleLandingEmergencyLabel(String str)
+	{
+	LandingEmergencyLabel.setText(str);
+	}
+	
 	class FlightTableModel extends AbstractTableModel
 	{	
 		/**
@@ -243,7 +252,7 @@ public class MainWidget extends JFrame {
 	}
 
 	class ButtonListener implements ActionListener{
-
+		
 		public void actionPerformed(ActionEvent evt) {
 			if(evt.getSource()== addFlightButton )
 			{
@@ -252,9 +261,11 @@ public class MainWidget extends JFrame {
 			}
 			if(evt.getSource()== AddingCreateButton )
 			{
-				if(AddingEmergencyFalse.isSelected()){
 					try {
-						airScheduler.addPlane(AddingNameField.getText(), false, Integer.parseInt(AddingGapSpinner.getValue().toString()), AddingTimeSpinner.getValue().toString());
+						Date date = (Date)AddingTimeSpinner.getValue();
+						airScheduler.addPlane(AddingNameField.getText(), AddingEmergencyTrue.isSelected(),Integer.parseInt(AddingGapSpinner.getValue().toString()), date.getTime());
+						airScheduler.landPlanes();	
+						originGUI.refreshTables();
 					} catch (NumberFormatException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -262,23 +273,6 @@ public class MainWidget extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-				if(AddingEmergencyTrue.isSelected())
-				{
-					try {
-						//airScheduler.addPlane(AddingNameField.getText(), true, Integer.parseInt(AddingGapSpinner.getValue().toString()), AddingTimeSpinner.getValue().toString());
-					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-				airScheduler.landPlanes();
-				
-				
 			}
 			
 		}
@@ -329,7 +323,6 @@ public class MainWidget extends JFrame {
 			AddingTimeSpinner.setEditor(new JSpinner.DateEditor(AddingTimeSpinner, "yyyy-MM-dd HH:mm:ss "));
 			
 			addPlanePanel.add(AddingTimeSpinner);
-			
 			AddingCreateButton = new JButton ("Create");
 			AddingCreateButton.addActionListener(new ButtonListener());
 			addPlanePanel.add(AddingCreateButton);
