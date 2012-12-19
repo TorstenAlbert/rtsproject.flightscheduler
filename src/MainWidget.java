@@ -6,10 +6,9 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
+
 
 
 /**
@@ -36,6 +35,7 @@ public class MainWidget extends JFrame {
 	JLabel LandingAirstrip2Label;
 	JLabel LandingAirstrip3Label;
 	JLabel LandingEmergencyLabel;
+	JLabel statusLabel;
 	
 	JSpinner AddingTimeSpinner;
 	JSpinner AddingGapSpinner;
@@ -53,8 +53,8 @@ public class MainWidget extends JFrame {
 	{
 		this.originGUI = this;
 		this.airScheduler = rScheduler;
-		AddingFrame = new AddingPlaneWidget();
-		AddingFrame.setVisible(false);
+		//AddingFrame = new AddingPlaneWidget();
+		//AddingFrame.setVisible(false);
 		
 		JPanel operationPanel = new JPanel();
 		GridLayout addPlanePanelLayout = new GridLayout(9,1);
@@ -65,10 +65,11 @@ public class MainWidget extends JFrame {
 		addFlightButton.setText("ADD Flight");
 		addFlightButton.addActionListener(new ButtonListener());
 		
-		LandingAirstrip1Label = new JLabel("");
-		LandingAirstrip2Label = new JLabel("");
-		LandingAirstrip3Label = new JLabel("");
-		LandingEmergencyLabel = new JLabel("");
+		LandingAirstrip1Label = new JLabel();
+		LandingAirstrip2Label = new JLabel();
+		LandingAirstrip3Label = new JLabel();
+		LandingEmergencyLabel = new JLabel();
+		statusLabel = new JLabel();
 		
 		operationPanel.add(new JLabel ("Airstip 1"));
 		operationPanel.add(LandingAirstrip1Label);
@@ -133,7 +134,8 @@ public class MainWidget extends JFrame {
 		
 		this.add(widgetMenuBar,BorderLayout.PAGE_START);
 
-		this.add( new JLabel(new Timestamp(System.currentTimeMillis()).toString()),BorderLayout.PAGE_END);
+		
+		this.add(statusLabel,BorderLayout.PAGE_END);
 		
 		this.add(operationPanel,BorderLayout.LINE_START);
 
@@ -154,6 +156,7 @@ public class MainWidget extends JFrame {
 		this.setTitleLandingAirstrip1Label(this.airScheduler.resourceAirstrips[0].getPlanes().get(0).getPlaneName());
 		this.setTitleLandingAirstrip2Label(this.airScheduler.resourceAirstrips[1].getPlanes().get(0).getPlaneName());
 		this.setTitleLandingAirstrip3Label(this.airScheduler.resourceAirstrips[2].getPlanes().get(0).getPlaneName());
+		this.statusLabel.setText("Last Refresh at " + new Timestamp(System.currentTimeMillis()).toString());
 	}
 	
 	public void buildIncFlightsTable(LinkedList<Plane> allplanes)
@@ -198,9 +201,6 @@ public class MainWidget extends JFrame {
 	
 	class FlightTableModel extends AbstractTableModel
 	{	
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		
 		int row,column=5;
@@ -256,8 +256,9 @@ public class MainWidget extends JFrame {
 		public void actionPerformed(ActionEvent evt) {
 			if(evt.getSource()== addFlightButton )
 			{
+				if(AddingFrame==null)
+				AddingFrame = new AddingPlaneWidget();
 				AddingFrame.setVisible(true);
-				
 			}
 			if(evt.getSource()== AddingCreateButton )
 			{
@@ -280,9 +281,9 @@ public class MainWidget extends JFrame {
 	}
 	
 	class AddingPlaneWidget extends JFrame{
-		
+		private static final long serialVersionUID = 1L;
+
 		AddingPlaneWidget(){
-			
 			JPanel addPlanePanel = new JPanel();
 			this.getContentPane().add(addPlanePanel);
 			GridLayout addPlanePanelLayout = new GridLayout(10,1);
@@ -290,97 +291,40 @@ public class MainWidget extends JFrame {
 			addPlanePanel.setBorder(BorderFactory.createTitledBorder("Create Plane Konfiguration"));
 			this.setSize(250,250);
 			this.setTitle("Add Plane");
-			//Var
-			 AddingEmergencyTrue = new JRadioButton("True",false);
-			 AddingEmergencyFalse = new JRadioButton("False",true);
+			AddingEmergencyTrue = new JRadioButton("True",false);
+			AddingEmergencyFalse = new JRadioButton("False",true);
 			ButtonGroup emergencyFlag = new ButtonGroup();
-			
-			
 			emergencyFlag.add(AddingEmergencyTrue);
 			emergencyFlag.add(AddingEmergencyFalse);
 			AddingEmergencyFalse.setToolTipText("deactivate the Emergency Flag");
 			AddingEmergencyTrue.setToolTipText("activate the Emergency Flag");
 			addPlanePanel.add(new JLabel ("Name"));
-			//Var
 			AddingNameField = new JTextField();
 			addPlanePanel.add(AddingNameField);
 			addPlanePanel.add(new JLabel ("Emergency Flag"));
 			addPlanePanel.add(AddingEmergencyTrue);
 			addPlanePanel.add(AddingEmergencyFalse);
-			
 			addPlanePanel.add(new JLabel ("Gap"));
-			//Var
-			AddingGapSpinner = new JSpinner();
+			SpinnerNumberModel modelGap = new SpinnerNumberModel(0,0,30,1); 
+			AddingGapSpinner = new JSpinner(modelGap);
+			JSpinner.NumberEditor editorGap = (JSpinner.NumberEditor)AddingGapSpinner.getEditor();
+			editorGap.getTextField().setEditable(false);
 			addPlanePanel.add(AddingGapSpinner);
-			
-			
 			addPlanePanel.add(new JLabel ("Target Time"));
-			//Var
-			SpinnerDateModel model = new SpinnerDateModel();
-			model.setCalendarField(Calendar.MINUTE);
-			AddingTimeSpinner = new JSpinner();
-			AddingTimeSpinner.setModel(model);
+			SpinnerDateModel modelTime = new SpinnerDateModel(); 
+			modelTime.setCalendarField(Calendar.MINUTE);
+			AddingTimeSpinner = new JSpinner(modelTime);
 			AddingTimeSpinner.setEditor(new JSpinner.DateEditor(AddingTimeSpinner, "yyyy-MM-dd HH:mm:ss "));
-			
+			JSpinner.DateEditor editor = (JSpinner.DateEditor)AddingTimeSpinner.getEditor();
+			editor.getTextField().setEditable(false);
 			addPlanePanel.add(AddingTimeSpinner);
 			AddingCreateButton = new JButton ("Create");
 			AddingCreateButton.addActionListener(new ButtonListener());
 			addPlanePanel.add(AddingCreateButton);
-		this.setVisible(true);}
+			this.setVisible(true);
+		}
 		
 	}
-	
-	
-/*	
-static class MyCellRenderer extends JPanel implements ListCellRenderer
-{ 
-	JLabel left, middle, right;
-	MyCellRenderer() {
-	setLayout(new GridLayout(1, 3));
-	left = new JLabel();
-	middle	= new JLabel();
-	right = new JLabel();
-	left.setOpaque(true);
-	middle.setOpaque(true);
-	right.setOpaque(true);
-	add(left);
-	add(middle);
-	add(right);
-}
-
-	public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus)
-	{
-		String leftData = ((String[])value)[0];
-		String middleData = ((String[])value)[1];
-		String rightData = ((String[])value)[2];
-		left.setText(leftData);
-		middle.setText(middleData);
-		right.setText(rightData);
-		if(isSelected){
-				left.setBackground(list.getSelectionBackground());
-				left.setForeground(list.getSelectionForeground());
-				middle.setBackground(list.getSelectionBackground());
-				middle.setForeground(list.getSelectionForeground());
-				right.setBackground(list.getSelectionBackground());
-				right.setForeground(list.getSelectionForeground());
-					}
-		else{
-				left.setBackground(list.getBackground());
-				left.setForeground(list.getForeground());
-				middle.setBackground(list.getBackground());
-				middle.setForeground(list.getForeground());
-				right.setBackground(list.getBackground());
-				right.setForeground(list.getForeground());
-			}
-		setEnabled(list.isEnabled());
-		setFont(list.getFont());
-		return this;
-	}
-}*/
-
-
-	
-
 }
 
 
