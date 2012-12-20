@@ -56,7 +56,7 @@ public class AircraftScheduler {
 			PlaneData = PlanesData[i].split(";");
 			
 			PlanesToAdd[j] = new Plane(  PlaneData[0],
-					                     PlaneData[1]=="1",
+					                     PlaneData[1].contains("1"),
 					                     new Integer(PlaneData[2]),
 					                     dateFormat.parse(PlaneData[3]).getTime() 
 					                  );
