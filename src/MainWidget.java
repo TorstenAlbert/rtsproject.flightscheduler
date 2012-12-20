@@ -13,14 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-
-
-/**
- * GUI 
- */
-
 public class MainWidget extends JFrame {
-
 	private static final long serialVersionUID = 1L;
 	AircraftScheduler airScheduler;
 	JPanel mainPanel;
@@ -52,22 +45,18 @@ public class MainWidget extends JFrame {
 	{
 		this.originGUI = this;
 		this.airScheduler = rScheduler;
-		
 		JPanel operationPanel = new JPanel();
 		GridLayout addPlanePanelLayout = new GridLayout(9,1);
 		operationPanel.setLayout(addPlanePanelLayout);
 		operationPanel.setBorder(BorderFactory.createTitledBorder("Operations"));
-		
 		addFlightButton = new JButton();
 		addFlightButton.setText("ADD Flight");
 		addFlightButton.addActionListener(new ButtonListener());
-		
 		LandingAirstrip1Label = new JLabel();
 		LandingAirstrip2Label = new JLabel();
 		LandingAirstrip3Label = new JLabel();
 		LandingEmergencyLabel = new JLabel();
 		statusLabel = new JLabel();
-		
 		operationPanel.add(new JLabel ("Airstip 1"));
 		operationPanel.add(LandingAirstrip1Label);
 		operationPanel.add(new JLabel ("Airstrip 2"));
@@ -77,7 +66,6 @@ public class MainWidget extends JFrame {
 		operationPanel.add(new JLabel ("Emergency Call"));
 		operationPanel.add(LandingEmergencyLabel);
 		operationPanel.add(addFlightButton);
-			
 		JMenuBar widgetMenuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenu schedule = new JMenu("Scheduler");
@@ -90,18 +78,14 @@ public class MainWidget extends JFrame {
 		isActivScheduleItem.addActionListener(new MenuListener());
 		helpItem = new JMenuItem("About");
 		helpItem.addActionListener(new MenuListener());
-		
 		file.add(openFileItem);
 		file.add(closeItem);
 		schedule.add(isActivScheduleItem);
 		help.add(helpItem);
-		
 		widgetMenuBar.add(file);
 		widgetMenuBar.add(schedule);
 		widgetMenuBar.add(help);
 		this.add(widgetMenuBar);
-		
-		
 		incFlightsTable = new JTable();
 		airstripTable1 = new JTable();
 		airstripTable2 = new JTable();
@@ -109,8 +93,6 @@ public class MainWidget extends JFrame {
 		incFlightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		incFlightsTable.setColumnSelectionAllowed(true);
 		incFlightsTable.setRowSelectionAllowed(false);
-		
-
 		mainPanel = new JPanel(new BorderLayout(2,2));
 		airstripPanel = new JTabbedPane();
 		JPanel airstripPanel1 = new JPanel();
@@ -122,30 +104,20 @@ public class MainWidget extends JFrame {
 		airstripPanel.addTab("Airstrip 1", airstripPanel1);
 		airstripPanel.addTab("Airstrip 2", airstripPanel2);
 		airstripPanel.addTab("Airstrip 3", airstripPanel3);
-		
-		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		Dimension d= Toolkit.getDefaultToolkit().getScreenSize();
 		this.setSize(d.width,d.height);
 		this.setLocation( (d.width - this.getSize().width)/2,
 						  (d.height - this.getSize().height)/2);
 		this.setResizable(true);
 		this.setTitle("Flight Scheduler");
-		
 		this.add(widgetMenuBar,BorderLayout.PAGE_START);
-
-		
 		this.add(statusLabel,BorderLayout.PAGE_END);
-		
 		this.add(operationPanel,BorderLayout.LINE_START);
-
 		this.add(new JScrollPane(incFlightsTable),BorderLayout.CENTER);
 		this.add(airstripPanel,BorderLayout.LINE_END);
 		this.setVisible(true);
 		this.pack();
-		
-	
 	}
 	
 	public void refreshTables()
@@ -213,13 +185,12 @@ public class MainWidget extends JFrame {
 	class FlightTableModel extends AbstractTableModel
 	{	
 		private static final long serialVersionUID = 1L;
-		
 		int row,column=5;
-	String[][] columnData;
-	String[] dataHeader = new String[5];
-
+		String[][] columnData;
+		String[] dataHeader = new String[5];
+		
 		FlightTableModel(LinkedList<Plane> allplanes){
-			columnData = new String[allplanes.size()+1][column];
+			columnData = new String[allplanes.size()][column];
 			for(int i=0;i<allplanes.size();i++)
 			{
 				columnData[i][0] = allplanes.get(i).getScheduledTime().toString().substring(10,19);
@@ -228,20 +199,17 @@ public class MainWidget extends JFrame {
 				if(allplanes.get(i).isEmergencyFlag())
 				{columnData[i][3] = "true";}else{columnData[i][3] = "false";}
 				columnData[i][4] = ""+allplanes.get(i).getLandingDuration();
-				
 			}
+			
 			this.row = columnData.length;
-	
 			dataHeader[0] = "Scheduled Time";
 			dataHeader[1] = "Plane Name";
 			dataHeader[2] = "Target Time";
 			dataHeader[3] = "Emergency Flag";
 			dataHeader[4] = "Landing Duration";
-			
 		}
 		
 		public int getColumnCount() {
-			// TODO Auto-generated method stub
 			return this.column;
 		}
 
@@ -252,7 +220,6 @@ public class MainWidget extends JFrame {
 		
 		
 		public int getRowCount() {
-			// TODO Auto-generated method stub
 			return this.row;
 		}
 
@@ -279,16 +246,12 @@ public class MainWidget extends JFrame {
 						airScheduler.landPlanes();	
 						originGUI.refreshTables();
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 			}
-			
 		}
-
 	}
 	
 	class MenuListener implements ActionListener{
@@ -297,7 +260,6 @@ public class MainWidget extends JFrame {
 			if(evt.getSource()== openFileItem )
 			{
 			    JFileChooser fc = new JFileChooser();
-			    fc.setFileFilter( new FileNameExtensionFilter("Textfiles","*.txt"));
 			    int state = fc.showOpenDialog( null );
 			    if ( state == JFileChooser.APPROVE_OPTION )
 			    {
