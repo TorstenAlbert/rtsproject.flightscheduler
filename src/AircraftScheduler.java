@@ -12,13 +12,68 @@ import java.util.Scanner;
 
 public class AircraftScheduler {
 	
-	public LinkedList<Plane> flights;
-	public Airstrip resourceAirstrips[] = new Airstrip[3];
+	private LinkedList<Plane> flights;
+	private Airstrip resourceAirstrips[] = new Airstrip[3];
+	private boolean isRemovingActiv;
+	
+	public Airstrip[] getResourceAirstrips() {
+		return resourceAirstrips;
+	}
+
+	public void setResourceAirstrips(Airstrip[] rresourceAirstrips) {
+		this.resourceAirstrips = rresourceAirstrips;
+	}
+
+	public void setFlights(LinkedList<Plane> rflights) {
+		this.flights = rflights;
+	}
+
+	public void cmpFlightsWithCurrentTime(Timestamp currentTime)
+	{System.out.println("Current Time: " +currentTime.toString());
+		for(int i=0; i<flights.size();i++)
+		{Plane cmpPlane = flights.get(i);
+			if(currentTime.after(cmpPlane.getScheduledTime()))
+				{
+					this.removePlane(cmpPlane);
+					System.out.println("Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+				}
+			else
+				{
+					System.out.println("Not Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+				}
+		}
+	}
+
+	public void removePlane(Plane rmvPlane)
+	{
+		this.flights.remove(rmvPlane);
+		if(resourceAirstrips[0].getPlanes().contains(rmvPlane))
+			{resourceAirstrips[0].removePlane(rmvPlane);}
+		else{
+			if(resourceAirstrips[1].getPlanes().contains(rmvPlane))
+			{resourceAirstrips[1].removePlane(rmvPlane);}
+			else{
+				if(resourceAirstrips[2].getPlanes().contains(rmvPlane))
+				{resourceAirstrips[2].removePlane(rmvPlane);}
+				}
+			}
+	}
+	
+	public boolean isRemovingActiv() {
+		return isRemovingActiv;
+	}
+
+
+	public void setRemovingActiv(boolean isRemovingActiv) {
+		this.isRemovingActiv = isRemovingActiv;
+	}
+
 
 	public AircraftScheduler(){
 
+
 		flights = new LinkedList<Plane>();
-		
+		isRemovingActiv = false;
 		for (int i = 0; i < resourceAirstrips.length; i++) {
 			 resourceAirstrips[i] = new Airstrip();
 		}
@@ -31,10 +86,7 @@ public class AircraftScheduler {
 			return flights;
 		}
 		
-	public void removePlane(Plane rmvPlane) {
-			flights.remove(rmvPlane);
-			Collections.sort(flights, Plane.PlaneByTimeComparator);
-		}
+
 			
 			
 	public void createPlanes() throws IOException, ParseException, InstantiationException, IllegalAccessException

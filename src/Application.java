@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 
 public class Application {
@@ -13,6 +16,9 @@ public class Application {
 	 * @throws InstantiationException 
 	 * 
 	 */
+	
+
+	
 	public static void main(String[] args) throws IOException, ParseException, InstantiationException, IllegalAccessException {
 		// TODO Auto-generated method stub
         long startN = System.nanoTime();
@@ -29,7 +35,15 @@ public class Application {
         diffN /= 1000 * 1000 * 1000;
         
         System.out.println("Nano seconds: " + diffN);
+        
+		Timer timer = new Timer();
+		TimerTask removePlanesTask = new RemoveLandedPlanes(app,appWidget);
+		timer.schedule(removePlanesTask, 1000, 60000);
 		
 	}
+
+
+
+	
 
 }

@@ -50,9 +50,7 @@ public class Airstrip {
 	}
 	
 
-	public void addLandedPlane(Plane landedPlane) {
-		landedPlanes.add(landedPlane);
-	}
+
 	
 	public void addPlane(Plane Plane) {
 		RunWayPlanes.add(Plane);
@@ -66,6 +64,11 @@ public class Airstrip {
 	public void removeLastPlane() {
 		
 		RunWayPlanes.remove(RunWayPlanes.size() - 1);
+	}
+	
+	public void removePlane(Plane rmvPlane) {
+		RunWayPlanes.remove(rmvPlane);
+		landedPlanes.add(rmvPlane);
 	}
 	
 	public boolean isLastPlaneEmergency()

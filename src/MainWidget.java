@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -122,20 +121,32 @@ public class MainWidget extends JFrame {
 	
 	public void refreshTables()
 	{
-		this.buildIncFlightsTable(this.airScheduler.getFlights());
-		this.buildAirstrip1Table(this.airScheduler.resourceAirstrips[0].getPlanes());
-		this.buildAirstrip2Table(this.airScheduler.resourceAirstrips[1].getPlanes());
-		this.buildAirstrip3Table(this.airScheduler.resourceAirstrips[2].getPlanes());
-		this.setTitleLandingAirstrip1Label(this.airScheduler.resourceAirstrips[0].getPlanes().get(0).getPlaneName());
-		this.setTitleLandingAirstrip2Label(this.airScheduler.resourceAirstrips[1].getPlanes().get(0).getPlaneName());
-		this.setTitleLandingAirstrip3Label(this.airScheduler.resourceAirstrips[2].getPlanes().get(0).getPlaneName());
-		for (Plane plane: this.airScheduler.getFlights())
-			{if(plane.isEmergencyFlag())
-				{this.LandingEmergencyLabel.setText(plane.getPlaneName());
-					break;}
-			else{this.LandingEmergencyLabel.setText("");}
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				buildIncFlightsTable(airScheduler.getFlights());
+				buildAirstrip1Table(airScheduler.getResourceAirstrips()[0].getPlanes());
+				buildAirstrip2Table(airScheduler.getResourceAirstrips()[1].getPlanes());
+				buildAirstrip3Table(airScheduler.getResourceAirstrips()[2].getPlanes());
+				if(airScheduler.getResourceAirstrips()[0].getPlanes().isEmpty())
+				{setTitleLandingAirstrip1Label("No Plane");}else{
+				setTitleLandingAirstrip1Label(airScheduler.getResourceAirstrips()[0].getPlanes().get(0).getPlaneName());}
+				if(airScheduler.getResourceAirstrips()[1].getPlanes().isEmpty())
+				{setTitleLandingAirstrip2Label("No Plane");}else{
+				setTitleLandingAirstrip2Label(airScheduler.getResourceAirstrips()[1].getPlanes().get(0).getPlaneName());}
+				if(airScheduler.getResourceAirstrips()[2].getPlanes().isEmpty())
+				{setTitleLandingAirstrip3Label("No Plane");}else{
+				setTitleLandingAirstrip3Label(airScheduler.getResourceAirstrips()[2].getPlanes().get(0).getPlaneName());}
+				for (Plane plane: airScheduler.getFlights())
+					{if(plane.isEmergencyFlag())
+						{LandingEmergencyLabel.setText(plane.getPlaneName());
+							break;}
+					else{LandingEmergencyLabel.setText("");}
+					}
+				statusLabel.setText("Last Refresh at " + new Timestamp(System.currentTimeMillis()).toString());
+				
 			}
-		this.statusLabel.setText("Last Refresh at " + new Timestamp(System.currentTimeMillis()).toString());
+			});
+
 	}
 	
 	public void buildIncFlightsTable(LinkedList<Plane> allplanes)
@@ -267,7 +278,7 @@ public class MainWidget extends JFrame {
 			      System.out.println(file.getPath());
 			    }
 			    else
-			    	statusLabel.setText("Open File aborted");
+			    	statusLabel.setText("Open File Procedure aborted");
 			}
 			if(evt.getSource()== closeItem )
 			{
@@ -276,9 +287,9 @@ public class MainWidget extends JFrame {
 			if(evt.getSource()== isActivScheduleItem )
 			{
 				if(isActivScheduleItem.isSelected())
-				{System.out.println("true");}
+				{airScheduler.setRemovingActiv(true);}
 				else
-				{System.out.println("false");}
+				{airScheduler.setRemovingActiv(false);}
 			}
 			if(evt.getSource()== helpItem )
 			{
@@ -314,7 +325,7 @@ public class MainWidget extends JFrame {
 			addPlanePanel.add(AddingEmergencyTrue);
 			addPlanePanel.add(AddingEmergencyFalse);
 			addPlanePanel.add(new JLabel ("Gap"));
-			SpinnerNumberModel modelGap = new SpinnerNumberModel(0,0,30,1); 
+			SpinnerNumberModel modelGap = new SpinnerNumberModel(1,1,30,1); 
 			AddingGapSpinner = new JSpinner(modelGap);
 			JSpinner.NumberEditor editorGap = (JSpinner.NumberEditor)AddingGapSpinner.getEditor();
 			editorGap.getTextField().setEditable(false);
@@ -323,7 +334,7 @@ public class MainWidget extends JFrame {
 			SpinnerDateModel modelTime = new SpinnerDateModel(); 
 			modelTime.setCalendarField(Calendar.MINUTE);
 			AddingTimeSpinner = new JSpinner(modelTime);
-			AddingTimeSpinner.setEditor(new JSpinner.DateEditor(AddingTimeSpinner, "yyyy-MM-dd HH:mm:ss "));
+			AddingTimeSpinner.setEditor(new JSpinner.DateEditor(AddingTimeSpinner, "yyyy-MM-dd HH:mm:ss"));
 			JSpinner.DateEditor editor = (JSpinner.DateEditor)AddingTimeSpinner.getEditor();
 			editor.getTextField().setEditable(false);
 			addPlanePanel.add(AddingTimeSpinner);
