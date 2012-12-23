@@ -1,7 +1,8 @@
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 
@@ -25,20 +26,17 @@ public class Application {
 		
 		AircraftScheduler app = new AircraftScheduler();
 		MainWidget appWidget = new MainWidget(app);
-		app.createPlanes();
-		app.landPlanes();
-		appWidget.refreshTables();
-
+		
 		long endN = System.nanoTime();
 		
         double diffN = endN - startN;
         diffN /= 1000 * 1000 * 1000;
         
-        System.out.println("Nano seconds: " + diffN);
-        
-		Timer timer = new Timer();
-		TimerTask removePlanesTask = new RemoveLandedPlanes(app,appWidget);
-		timer.schedule(removePlanesTask, 1000, 60000);
+        System.out.println("Duration for creating Application\nNano seconds: " + diffN);
+
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        Runnable task = new RemoveLandedPlanes(app,appWidget);
+        executor.scheduleAtFixedRate(task,0,1, TimeUnit.MINUTES);
 		
 	}
 

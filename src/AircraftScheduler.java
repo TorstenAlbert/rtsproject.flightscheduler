@@ -29,18 +29,26 @@ public class AircraftScheduler {
 	}
 
 	public void cmpFlightsWithCurrentTime(Timestamp currentTime)
-	{System.out.println("Current Time: " +currentTime.toString());
-		for(int i=0; i<flights.size();i++)
-		{Plane cmpPlane = flights.get(i);
+	{
+		System.out.println("Current Time: " +currentTime.toString()+" Elements: " + flights.size());
+		LinkedList<Plane> oldFlights = new LinkedList<Plane>();
+		for(int i=0; i<=flights.size()-1;i++)
+		{
+			Plane cmpPlane = flights.get(i);
 			if(currentTime.after(cmpPlane.getScheduledTime()))
 				{
-					this.removePlane(cmpPlane);
-					System.out.println("Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+				oldFlights.add(cmpPlane);
+					System.out.println("I: " +i+" Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
 				}
 			else
 				{
-					System.out.println("Not Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+					System.out.println("I: " +i+" Not Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
 				}
+		}
+
+		for(Plane rmvPlane: oldFlights)
+		{
+			this.removePlane(rmvPlane);
 		}
 	}
 
@@ -89,11 +97,11 @@ public class AircraftScheduler {
 
 			
 			
-	public void createPlanes() throws IOException, ParseException, InstantiationException, IllegalAccessException
+	public void createPlanes(String fileName) throws IOException, ParseException, InstantiationException, IllegalAccessException
 	{
 
 		//Create Predefined Planes
-		String textFromFile = getTextFromFile("PredefinedPlanes.txt");
+		String textFromFile = getTextFromFile(fileName);
 		String[] PlanesData = textFromFile.split("#");
 		String[] PlaneData = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

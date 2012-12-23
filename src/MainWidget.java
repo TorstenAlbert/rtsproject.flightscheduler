@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -55,7 +56,7 @@ public class MainWidget extends JFrame {
 		LandingAirstrip2Label = new JLabel();
 		LandingAirstrip3Label = new JLabel();
 		LandingEmergencyLabel = new JLabel();
-		statusLabel = new JLabel();
+		statusLabel = new JLabel("Created at " + new Timestamp(System.currentTimeMillis()).toString());
 		operationPanel.add(new JLabel ("Airstip 1"));
 		operationPanel.add(LandingAirstrip1Label);
 		operationPanel.add(new JLabel ("Airstrip 2"));
@@ -276,6 +277,23 @@ public class MainWidget extends JFrame {
 			    {
 			      File file = fc.getSelectedFile();
 			      System.out.println(file.getPath());
+			      try {
+					airScheduler.createPlanes(file.getPath());
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			      airScheduler.landPlanes();
+			      originGUI.refreshTables();
 			    }
 			    else
 			    	statusLabel.setText("Open File Procedure aborted");
