@@ -186,6 +186,8 @@ public class AircraftScheduler {
 			{
 			   flights.get(i).setScheduledTime( new Timestamp(flights.get(i).getScheduledTime().getTime() + Gap) );
 			   resourceAirstrips[RunWayWithMinGap].addPlane(flights.get(i));
+			 //Add Set Airstrip Number
+			   flights.get(i).setAirstripNumber(RunWayWithMinGap);
 			}
 			else
 			{				

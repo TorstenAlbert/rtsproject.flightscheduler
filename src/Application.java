@@ -36,7 +36,7 @@ public class Application {
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable task = new RemoveLandedPlanes(app,appWidget);
-        executor.scheduleAtFixedRate(task,0,1, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(task,0,10, TimeUnit.SECONDS);
 		
 	}
 
