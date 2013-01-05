@@ -50,6 +50,8 @@ public class AircraftScheduler {
 		{
 			this.removePlane(rmvPlane);
 		}
+			System.out.println("Lenght of Flights List: " +flights.size());
+
 	}
 
 	public void removePlane(Plane rmvPlane)

@@ -7,7 +7,10 @@ import java.util.Comparator;
 
 public class Plane {
 
-	private static int	planeCounter	= 0;
+	private static  int	planeCounter	= 0;
+	private   int	planeNumber;
+
+
 	private boolean emergencyFlag;
 	private Timestamp landingDeadline;
 	private Timestamp landingScheduledTime;
@@ -15,6 +18,9 @@ public class Plane {
 	private String planeName;
 	private String airstripNumber;
 	
+	public int getPlaneNumber() {
+		return planeNumber;
+	}
 	
 	public String getAirstripNumber() {
 		return airstripNumber;
@@ -61,6 +67,7 @@ public class Plane {
 	
 	public Plane(String name, boolean emergency, int duration, long deadline){
 		planeCounter++;
+		this.planeNumber = planeCounter;
 		this.emergencyFlag = emergency;
 		this.landingDeadline = new Timestamp(deadline);
 		this.landingScheduledTime = new Timestamp(deadline);

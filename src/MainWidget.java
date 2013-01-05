@@ -22,9 +22,12 @@ public class MainWidget extends JFrame {
 	JPanel mainPanel;
 	JTabbedPane airstripPanel;
 	JTable incFlightsTable;
-	JTable airstripTable1;
-	JTable airstripTable2;
-	JTable airstripTable3;
+	JTable airstripIncTable1;
+	JTable airstripIncTable2;
+	JTable airstripIncTable3;
+	JTable airstripLandedTable1;
+	JTable airstripLandedTable2;
+	JTable airstripLandedTable3;
 	JButton addFlightButton;
 	JMenuItem openFileItem;
 	JMenuItem closeItem;
@@ -90,20 +93,30 @@ public class MainWidget extends JFrame {
 		widgetMenuBar.add(help);
 		this.add(widgetMenuBar);
 		incFlightsTable = new JTable();
-		airstripTable1 = new JTable();
-		airstripTable2 = new JTable();
-		airstripTable3 = new JTable();
+		airstripIncTable1 = new JTable();
+		airstripIncTable2 = new JTable();
+		airstripIncTable3 = new JTable();
+		airstripLandedTable1 = new JTable();
+		airstripLandedTable2 = new JTable();
+		airstripLandedTable3 = new JTable();
 		incFlightsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		incFlightsTable.setColumnSelectionAllowed(false);
 		incFlightsTable.setRowSelectionAllowed(true);
 		mainPanel = new JPanel(new BorderLayout(2,2));
 		airstripPanel = new JTabbedPane();
+		GridLayout airstripPanelLayout = new GridLayout(2,1);
 		JPanel airstripPanel1 = new JPanel();
+		airstripPanel1.setLayout(airstripPanelLayout);
 		JPanel airstripPanel2 = new JPanel();
+		airstripPanel2.setLayout(airstripPanelLayout);
 		JPanel airstripPanel3 = new JPanel();
-		airstripPanel1.add(new JScrollPane(airstripTable1));
-		airstripPanel2.add(new JScrollPane(airstripTable2));
-		airstripPanel3.add(new JScrollPane(airstripTable3));
+		airstripPanel3.setLayout(airstripPanelLayout);
+		airstripPanel1.add(new JScrollPane(airstripIncTable1));
+		airstripPanel1.add(new JScrollPane(airstripLandedTable1));
+		airstripPanel2.add(new JScrollPane(airstripIncTable2));
+		airstripPanel2.add(new JScrollPane(airstripLandedTable2));
+		airstripPanel3.add(new JScrollPane(airstripIncTable3));
+		airstripPanel3.add(new JScrollPane(airstripLandedTable3));
 		airstripPanel.addTab("Airstrip 1", airstripPanel1);
 		airstripPanel.addTab("Airstrip 2", airstripPanel2);
 		airstripPanel.addTab("Airstrip 3", airstripPanel3);
@@ -129,8 +142,11 @@ public class MainWidget extends JFrame {
 			public void run() {
 				buildIncFlightsTable(airScheduler.getFlights());
 				buildAirstrip1Table(airScheduler.getResourceAirstrips()[0].getPlanes());
+				buildAirstrip1LandedTable(airScheduler.getResourceAirstrips()[0].getLandedPlanes());
 				buildAirstrip2Table(airScheduler.getResourceAirstrips()[1].getPlanes());
+				buildAirstrip2LandedTable(airScheduler.getResourceAirstrips()[1].getLandedPlanes());
 				buildAirstrip3Table(airScheduler.getResourceAirstrips()[2].getPlanes());
+				buildAirstrip3LandedTable(airScheduler.getResourceAirstrips()[2].getLandedPlanes());
 				if(airScheduler.getResourceAirstrips()[0].getPlanes().isEmpty())
 				{setTitleLandingAirstrip1Label("No Plane");}else{
 				setTitleLandingAirstrip1Label(airScheduler.getResourceAirstrips()[0].getPlanes().get(0).getPlaneName());}
@@ -140,12 +156,19 @@ public class MainWidget extends JFrame {
 				if(airScheduler.getResourceAirstrips()[2].getPlanes().isEmpty())
 				{setTitleLandingAirstrip3Label("No Plane");}else{
 				setTitleLandingAirstrip3Label(airScheduler.getResourceAirstrips()[2].getPlanes().get(0).getPlaneName());}
+				if(airScheduler.getFlights().isEmpty())
+				{
+					LandingEmergencyLabel.setText("No Plane");
+				}
+				else
+				{
 				for (Plane plane: airScheduler.getFlights())
 					{if(plane.isEmergencyFlag())
 						{LandingEmergencyLabel.setText(plane.getPlaneName());
 							break;}
 					else{LandingEmergencyLabel.setText("");}
 					}
+				}
 				statusLabel.setText("Last Refresh at " + new Timestamp(System.currentTimeMillis()).toString());
 				
 			}
@@ -166,20 +189,45 @@ public class MainWidget extends JFrame {
 	
 	public void buildAirstrip1Table(LinkedList<Plane> allplanes)
 	{
-		airstripTable1.setModel(new FlightAirstripTableModel(allplanes));
-		airstripTable1.setRowSorter(new TableRowSorter<TableModel>(airstripTable1.getModel()));
+		airstripIncTable1.setModel(new FlightAirstripTableModel(allplanes));
+		airstripIncTable1.setRowSorter(new TableRowSorter<TableModel>(airstripIncTable1.getModel()));
+		airstripIncTable1.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
 	}
+	
+	public void buildAirstrip1LandedTable(LinkedList<Plane> landedPlanes)
+	{
+		airstripLandedTable1.setModel(new FlightAirstripLandedTableModel(landedPlanes));
+		airstripLandedTable1.setRowSorter(new TableRowSorter<TableModel>(airstripLandedTable1.getModel()));
+		airstripLandedTable1.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
+	}
+	
+	public void buildAirstrip2LandedTable(LinkedList<Plane> landedPlanes)
+	{
+		airstripLandedTable2.setModel(new FlightAirstripLandedTableModel(landedPlanes));
+		airstripLandedTable2.setRowSorter(new TableRowSorter<TableModel>(airstripLandedTable2.getModel()));
+		airstripLandedTable2.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
+	}
+	
+	public void buildAirstrip3LandedTable(LinkedList<Plane> landedPlanes)
+	{
+		airstripLandedTable3.setModel(new FlightAirstripLandedTableModel(landedPlanes));
+		airstripLandedTable3.setRowSorter(new TableRowSorter<TableModel>(airstripLandedTable3.getModel()));
+		airstripLandedTable3.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
+	}
+	
 	
 	public void buildAirstrip2Table(LinkedList<Plane> allplanes)
 	{
-		airstripTable2.setModel(new FlightAirstripTableModel(allplanes));
-		airstripTable2.setRowSorter(new TableRowSorter<TableModel>(airstripTable2.getModel()));
+		airstripIncTable2.setModel(new FlightAirstripTableModel(allplanes));
+		airstripIncTable2.setRowSorter(new TableRowSorter<TableModel>(airstripIncTable2.getModel()));
+		airstripIncTable2.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
 	}
 	
 	public void buildAirstrip3Table(LinkedList<Plane> allplanes)
 	{
-		airstripTable3.setModel(new FlightAirstripTableModel(allplanes));
-		airstripTable3.setRowSorter(new TableRowSorter<TableModel>(airstripTable3.getModel()));
+		airstripIncTable3.setModel(new FlightAirstripTableModel(allplanes));
+		airstripIncTable3.setRowSorter(new TableRowSorter<TableModel>(airstripIncTable3.getModel()));
+		airstripIncTable3.setDefaultRenderer(Object.class, new ColoredTableCellRenderer());
 	}
 	
 	public void setTitleLandingAirstrip1Label(String str)
@@ -216,7 +264,7 @@ public class MainWidget extends JFrame {
 			for(int i=0;i<allplanes.size();i++)
 			{
 				columnData[i][0] = allplanes.get(i).getScheduledTime().toString().substring(10,19);
-				columnData[i][1] = allplanes.get(i).getPlaneName();
+				columnData[i][1] = allplanes.get(i).getPlaneName().trim();
 				columnData[i][2] = allplanes.get(i).getLandingDeadline().toString().substring(10,19);
 				if(allplanes.get(i).isEmergencyFlag())
 				{columnData[i][3] = "true";}else{columnData[i][3] = "false";}
@@ -229,6 +277,56 @@ public class MainWidget extends JFrame {
 			dataHeader[2] = "Target Time";
 			dataHeader[3] = "Emergency Flag";
 			dataHeader[4] = "Landing Duration";
+		}
+		
+		public int getColumnCount() {
+			return this.column;
+		}
+
+		public String getColumnName(int col)
+		{
+			return this.dataHeader[col];
+		}
+		
+		
+		public int getRowCount() {
+			return this.row;
+		}
+
+		public Object getValueAt(int x, int y) {
+			return columnData[x][y];
+		}
+		
+	}
+	
+	
+	class FlightAirstripLandedTableModel extends AbstractTableModel
+	{	
+		private static final long serialVersionUID = 1L;
+		int row,column=5;
+		String[][] columnData;
+		String[] dataHeader = new String[5];
+		LinkedList<Plane> dataPlanes;
+		
+		FlightAirstripLandedTableModel(LinkedList<Plane> allplanes){
+			dataPlanes = allplanes;
+			columnData = new String[allplanes.size()][column];
+			for(int i=0;i<allplanes.size();i++)
+			{
+				columnData[i][0] = String.valueOf(allplanes.get(i).getPlaneNumber());
+				columnData[i][1] = allplanes.get(i).getPlaneName().trim();
+				columnData[i][2] = allplanes.get(i).getScheduledTime().toString().substring(10,19);
+				columnData[i][3] = allplanes.get(i).getLandingDeadline().toString().substring(10,19);
+				if(allplanes.get(i).isEmergencyFlag())
+				{columnData[i][4] = "true";}else{columnData[i][4] = "false";}
+			}
+			
+			this.row = columnData.length;
+			dataHeader[0] = "Plane Counter";
+			dataHeader[1] = "Plane Name";
+			dataHeader[2] = "Scheduled Time";
+			dataHeader[3] = "Target Time";
+			dataHeader[4] = "Emergency Flag";
 		}
 		
 		public int getColumnCount() {
@@ -439,42 +537,56 @@ public class ColoredTableCellRenderer  implements TableCellRenderer
 	        label.setBackground(table.getBackground());
 	        
 	        column = table.convertColumnIndexToModel(column);
-            if (column == 0)
-            {
-            	row = table.convertRowIndexToModel(row);
-	        	String cmpPlaneScheduledTimeStr = table.getModel().getValueAt(row, 0).toString();
-	        	String cmpPlaneTargetTimeStr = table.getModel().getValueAt(row, 2).toString();
-	        	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	        	Timestamp cmpPlaneTargetTime = null;
-				try {
-					cmpPlaneTargetTime = new Timestamp(dateFormat.parse(cmpPlaneTargetTimeStr).getTime());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	        	Timestamp cmpPlaneScheduledTime = null;
-				try {
-					cmpPlaneScheduledTime = new Timestamp(dateFormat.parse(cmpPlaneScheduledTimeStr).getTime());
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	        if(table==incFlightsTable)	
+	        {	
+	        	if (column == 0)
+	        	{
+	        		row = table.convertRowIndexToModel(row);
+	        		String cmpPlaneScheduledTimeStr = table.getModel().getValueAt(row, 0).toString();
+	        		String cmpPlaneTargetTimeStr = table.getModel().getValueAt(row, 2).toString();
+	        		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        		Timestamp cmpPlaneTargetTime = null;
+	        		try {
+	        			cmpPlaneTargetTime = new Timestamp(dateFormat.parse(cmpPlaneTargetTimeStr).getTime());
+	        			} 
+	        		catch (ParseException e) 
+	        			{
+	        					e.printStackTrace();
+	        			}
+	        		Timestamp cmpPlaneScheduledTime = null;
+	        		try {
+	        			cmpPlaneScheduledTime = new Timestamp(dateFormat.parse(cmpPlaneScheduledTimeStr).getTime());
+	        			}
+	        		catch (ParseException e)
+	        			{
+	        					e.printStackTrace();
+	        			}
+
+	        		if(cmpPlaneScheduledTime.after(cmpPlaneTargetTime))
+	        		{label.setBackground(Color.red);}
+	        		else
+	        		{label.setBackground(Color.green);}}
 	        	
-        	if(cmpPlaneScheduledTime.after(cmpPlaneTargetTime))
-        		{label.setBackground(Color.red);}
-        	else
-        		{label.setBackground(Color.green);}
-            
-            }
+		        if (hasFocus) {
+		        	if (column != 0 )
+		            label.setBackground(darkBlue);
+		            label.setForeground(Color.white);
+		        } else if (isSelected) {
+			        column = table.convertColumnIndexToModel(column);
+		            if (column != 0)
+		        	label.setBackground(lightBlue);
+		        } 
+            }else
+            {
+	        
 	        if (hasFocus) {
-	        	if (column != 0)
 	            label.setBackground(darkBlue);
 	            label.setForeground(Color.white);
 	        } else if (isSelected) {
 		        column = table.convertColumnIndexToModel(column);
-	            if (column != 0)
 	        	label.setBackground(lightBlue);
 	        } 
+            }
 	        return label;
 	}
 	
