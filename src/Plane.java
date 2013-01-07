@@ -16,17 +16,17 @@ public class Plane {
 	private Timestamp landingScheduledTime;
 	private int landingDuration;
 	private String planeName;
-	private String airstripNumber;
+	private int airstripNumber;
 	
 	public int getPlaneNumber() {
 		return planeNumber;
 	}
 	
-	public String getAirstripNumber() {
+	public int getAirstripNumber() {
 		return airstripNumber;
 	}
 	public void setAirstripNumber(int airstripNumber) {
-		this.airstripNumber = String.valueOf(airstripNumber);
+		this.airstripNumber = airstripNumber;
 	}
 	public boolean isEmergencyFlag() {
 		return emergencyFlag;
@@ -73,7 +73,7 @@ public class Plane {
 		this.landingScheduledTime = new Timestamp(deadline);
 		this.landingDuration = duration;
 		this.planeName = name;	
-		this.airstripNumber= "";
+		this.airstripNumber = 0;
 	}
 	
 	public static Comparator<Plane> PlaneByTimeComparator = new Comparator<Plane>() 

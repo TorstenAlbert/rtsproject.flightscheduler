@@ -35,9 +35,10 @@ public class Application {
         System.out.println("Duration for creating Application\nNano seconds: " + diffN);
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-        Runnable task = new RemoveLandedPlanes(app,appWidget);
-        executor.scheduleAtFixedRate(task,0,10, TimeUnit.SECONDS);
-		
+        Runnable task1 = new RemoveLandedPlanes(app,appWidget);
+        Runnable task2 = new CreateRandomPlane(app,appWidget);
+        executor.scheduleAtFixedRate(task1,0,10, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(task2,5,3, TimeUnit.MINUTES);
 	}
 
 

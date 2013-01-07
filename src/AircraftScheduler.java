@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -15,7 +16,16 @@ public class AircraftScheduler {
 	private LinkedList<Plane> flights;
 	private Airstrip resourceAirstrips[] = new Airstrip[3];
 	private boolean isRemovingActiv;
+	private boolean isCreatingActiv;
 	
+	public boolean isCreatingActiv() {
+		return isCreatingActiv;
+	}
+
+	public void setCreatingActiv(boolean isCreatingActiv) {
+		this.isCreatingActiv = isCreatingActiv;
+	}
+
 	public Airstrip[] getResourceAirstrips() {
 		return resourceAirstrips;
 	}
@@ -30,19 +40,20 @@ public class AircraftScheduler {
 
 	public void cmpFlightsWithCurrentTime(Timestamp currentTime)
 	{
-		System.out.println("Current Time: " +currentTime.toString()+" Elements: " + flights.size());
+		System.out.println("Current Time: " + currentTime.toString()+" Elements: " + flights.size());
 		LinkedList<Plane> oldFlights = new LinkedList<Plane>();
 		for(int i=0; i<=flights.size()-1;i++)
 		{
 			Plane cmpPlane = flights.get(i);
-			if(currentTime.after(cmpPlane.getScheduledTime()))
+			Timestamp cmpTimestamp = new Timestamp(cmpPlane.getScheduledTime().getTime()+ cmpPlane.getLandingDuration()*60000);
+			if(currentTime.after(cmpTimestamp))
 				{
 				oldFlights.add(cmpPlane);
-					System.out.println("I: " +i+" Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+					System.out.println("I: " +i+" Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpTimestamp.toString());
 				}
 			else
 				{
-					System.out.println("I: " +i+" Not Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpPlane.getScheduledTime().toString());
+					System.out.println("I: " +i+" Not Removed Plane: " +cmpPlane.getPlaneName()+" Plane Time: " + cmpTimestamp.toString());
 				}
 		}
 
@@ -51,7 +62,19 @@ public class AircraftScheduler {
 			this.removePlane(rmvPlane);
 		}
 			System.out.println("Lenght of Flights List: " +flights.size());
-
+	}
+	
+	public void createPlanes()
+	{
+		Random r = new Random();
+		int rndID = r.nextInt(100)+1;
+		if(rndID>=98)
+		{Plane incomingPlane = new Plane("Random "+rndID,true,r.nextInt(10)+1,(System.currentTimeMillis()+(r.nextInt(30)*60000)));
+		flights.add(incomingPlane); }
+		else
+		{Plane incomingPlane = new Plane("Random "+rndID,false,r.nextInt(10)+1,(System.currentTimeMillis()+(r.nextInt(30)*60000)));
+		flights.add(incomingPlane); }
+		Collections.sort(flights, Plane.PlaneByTimeComparator);
 	}
 
 	public void removePlane(Plane rmvPlane)
@@ -84,6 +107,7 @@ public class AircraftScheduler {
 
 		flights = new LinkedList<Plane>();
 		isRemovingActiv = false;
+		isCreatingActiv = false;
 		for (int i = 0; i < resourceAirstrips.length; i++) {
 			 resourceAirstrips[i] = new Airstrip();
 		}

@@ -32,6 +32,7 @@ public class MainWidget extends JFrame {
 	JMenuItem openFileItem;
 	JMenuItem closeItem;
 	JCheckBoxMenuItem isActivScheduleItem;
+	JCheckBoxMenuItem isActivCreateItem;
 	JLabel LandingAirstrip1Label;
 	JLabel LandingAirstrip2Label;
 	JLabel LandingAirstrip3Label;
@@ -80,13 +81,16 @@ public class MainWidget extends JFrame {
 		openFileItem.addActionListener(new MenuListener());
 		closeItem = new JMenuItem("Close");
 		closeItem.addActionListener(new MenuListener());
-		isActivScheduleItem = new JCheckBoxMenuItem("Activate Schedule");
+		isActivScheduleItem = new JCheckBoxMenuItem("Activate Remove Landed Planes");
 		isActivScheduleItem.addActionListener(new MenuListener());
+		isActivCreateItem = new JCheckBoxMenuItem("Activate Random Plane Creating");
+		isActivCreateItem.addActionListener(new MenuListener());
 		helpItem = new JMenuItem("About");
 		helpItem.addActionListener(new MenuListener());
 		file.add(openFileItem);
 		file.add(closeItem);
 		schedule.add(isActivScheduleItem);
+		schedule.add(isActivCreateItem);
 		help.add(helpItem);
 		widgetMenuBar.add(file);
 		widgetMenuBar.add(schedule);
@@ -366,7 +370,7 @@ public class MainWidget extends JFrame {
 				columnData[i][0] = allplanes.get(i).getScheduledTime().toString().trim();
 				columnData[i][1] = allplanes.get(i).getPlaneName();
 				columnData[i][2] = allplanes.get(i).getLandingDeadline().toString().trim();
-				columnData[i][3] = allplanes.get(i).getAirstripNumber().trim();
+				columnData[i][3] = String.valueOf(allplanes.get(i).getAirstripNumber()+1).trim();
 			}
 			
 			this.row = columnData.length;
@@ -463,6 +467,13 @@ public class MainWidget extends JFrame {
 				{airScheduler.setRemovingActiv(true);}
 				else
 				{airScheduler.setRemovingActiv(false);}
+			}
+			if(evt.getSource()== isActivCreateItem )
+			{
+				if(isActivCreateItem.isSelected())
+				{airScheduler.setCreatingActiv(true);}
+				else
+				{airScheduler.setCreatingActiv(false);}
 			}
 			if(evt.getSource()== helpItem )
 			{

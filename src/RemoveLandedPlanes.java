@@ -17,7 +17,7 @@ class RemoveLandedPlanes implements Runnable{
 		{
 			long startN = System.nanoTime();
 			System.out.println("---Task-Begin---");
-			
+			System.out.println("-----Remove-----");
 			if(app.isRemovingActiv())
 			{
 				Timestamp cmpTime = new Timestamp(System.currentTimeMillis());	
