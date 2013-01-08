@@ -80,8 +80,29 @@ public class Plane {
     {
 		public int compare(Plane plane0, Plane plane1) 
 		{	
-			int EmergencyWeight = 1;			
-								
+			int EmergencyWeight = 1;	
+			boolean pl0IsLand = false;
+			boolean pl1IsLand = false;
+			
+			if( new Timestamp(plane0.getScheduledTime().getTime()).before( new Timestamp( System.currentTimeMillis() ) ) 
+		           && new Timestamp(plane0.getScheduledTime().getTime() + plane0.getLandingDuration() *
+				       60000).after(new Timestamp( System.currentTimeMillis() ) ) )
+			{ pl0IsLand =  true; }
+			
+			if( new Timestamp(plane1.getScheduledTime().getTime()).before( new Timestamp( System.currentTimeMillis() ) ) 
+			           && new Timestamp(plane1.getScheduledTime().getTime() + plane1.getLandingDuration() *
+					       60000).after(new Timestamp( System.currentTimeMillis() ) ) )
+			{ pl1IsLand =  true; }
+			
+			if( pl0IsLand && ! pl1IsLand )
+     		 return plane0.landingScheduledTime.compareTo(new Timestamp(plane1.landingScheduledTime.getTime() + EmergencyWeight*plane1.landingDuration*60*1000 ));
+			
+			if( !pl0IsLand && pl1IsLand )
+			 return new Timestamp(plane0.landingScheduledTime.getTime() + EmergencyWeight*plane0.landingDuration*60*1000 ).compareTo(plane1.landingScheduledTime);
+			
+			if( pl0IsLand && pl1IsLand )
+			 return plane0.landingScheduledTime.compareTo(plane1.landingScheduledTime);
+				
 			if( plane0.isEmergencyFlag() && ! plane1.isEmergencyFlag() )
 			 return plane0.landingScheduledTime.compareTo(new Timestamp(plane1.landingScheduledTime.getTime() + EmergencyWeight*plane1.landingDuration*60*1000 ));
 			

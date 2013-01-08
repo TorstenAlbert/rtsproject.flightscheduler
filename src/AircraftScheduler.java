@@ -205,14 +205,14 @@ public class AircraftScheduler {
 					RunWayWithMinGap = k;
 				}				
 				
-			if( ! resourceAirstrips[k].isLastPlaneEmergency() ) { allLastPlanesAreEmergent = false; }
+			    if( ! resourceAirstrips[k].isLastPlaneEmergency() ) { allLastPlanesAreEmergent = false; }
 			}
 				
 			if( Gap == 0 || ! flights.get(i).isEmergencyFlag() || allLastPlanesAreEmergent )
 			{
 			   flights.get(i).setScheduledTime( new Timestamp(flights.get(i).getScheduledTime().getTime() + Gap) );
 			   resourceAirstrips[RunWayWithMinGap].addPlane(flights.get(i));
-			 //Add Set Airstrip Number
+			   //Add Set Airstrip Number
 			   flights.get(i).setAirstripNumber(RunWayWithMinGap);
 			}
 			else
@@ -220,22 +220,31 @@ public class AircraftScheduler {
 				
 				for( k=0; k < resourceAirstrips.length; k++)
 				{
-					if(  ! resourceAirstrips[k].isLastPlaneEmergency() 
-							&& Gap > (newGap = resourceAirstrips[k].getGapBetweenNewAndLast(flights.get(i))) )
-					{
+					
+					if(  ! resourceAirstrips[k].isLastPlaneEmergency()													
+							 && Gap > (newGap = resourceAirstrips[k].getGapBetweenNewAndLast(flights.get(i))) )
+					{					
 						Gap = newGap;
 						RunWayWithMinGap = k;
 					}					
 				}
 				
+
 				LastPlane = resourceAirstrips[RunWayWithMinGap].getLastPlane();
-				
-				if(LastPlane == null)
+								
+				if(LastPlane == null  ||
+						( new Timestamp(resourceAirstrips[RunWayWithMinGap].getLastPlane().getScheduledTime().getTime()).before(
+							    new Timestamp( System.currentTimeMillis() ) ) 
+							&& new Timestamp(resourceAirstrips[RunWayWithMinGap].getLastPlane().getScheduledTime().getTime() + 
+							resourceAirstrips[RunWayWithMinGap].getLastPlane().getLandingDuration() * 
+							   60000).after(new Timestamp( System.currentTimeMillis() ) ) )
+						)					    
 				{
 					flights.get(i).setScheduledTime( new Timestamp(flights.get(i).getScheduledTime().getTime() + Gap) );
 					resourceAirstrips[RunWayWithMinGap].addPlane(flights.get(i));
+					flights.get(i).setAirstripNumber(RunWayWithMinGap);
 					continue;
-				}
+				}				
 				
 				flights.get(i).setScheduledTime( new Timestamp(LastPlane.getScheduledTime().getTime()) );
 				
@@ -245,8 +254,9 @@ public class AircraftScheduler {
 				resourceAirstrips[RunWayWithMinGap].removeLastPlane();
 				resourceAirstrips[RunWayWithMinGap].addPlane(flights.get(i));
 				resourceAirstrips[RunWayWithMinGap].addPlane(LastPlane);
+				flights.get(i).setAirstripNumber(RunWayWithMinGap);
 			}
-		}
+		}		
 		
 		//Print results		
 		List<Plane> Rez = new ArrayList<Plane>();
